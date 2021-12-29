@@ -30,9 +30,9 @@ def get_document_comments(docxFileName):
     for c in comments:
         comment=c.xpath('string(.)',namespaces=ooXMLns)
         comment_id=c.xpath('@w:id',namespaces=ooXMLns)[0]
-        comments_dict[comment_id]=comment
-        print(c.xpath('@w:author',namespaces=ooXMLns))
-        print(c.xpath('@w:date',namespaces=ooXMLns))
+        author=(c.xpath('@w:author',namespaces=ooXMLns))
+        date=(c.xpath('@w:date',namespaces=ooXMLns))
+        comments_dict[comment_id]=[comment,author,date]
     return comments_dict
 #Function to fetch all the comments in a paragraph
 def paragraph_comments(paragraph,comments_dict):
@@ -41,6 +41,8 @@ def paragraph_comments(paragraph,comments_dict):
         comment_reference=run._r.xpath("./w:commentReference")
         if comment_reference:
             comment_id=comment_reference[0].xpath('@w:id',namespaces=ooXMLns)[0]
+            # author=(comment_reference[0].xpath('@w:author',namespaces=ooXMLns))
+            # date=(comment_reference[0].xpath('@w:date',namespaces=ooXMLns))
             comment=comments_dict[comment_id]
             comments.append(comment)
     return comments
